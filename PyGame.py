@@ -20,7 +20,7 @@ gameDisplay = pygame.display.set_mode((display_width,display_height)) #setting w
 pygame.display.set_caption('A bit Racey') #setting display name
 clock = pygame.time.Clock() #setting game clock
 
-carImg = pygame.image.load('pug.png')
+carImg = pygame.image.load('racecar.bmp')
 carImg = pygame.transform.scale(carImg, (150, 150)) #scaling picture (length, heighth)
 
 def things(thingx, thingy, thingw, thingh, color):
