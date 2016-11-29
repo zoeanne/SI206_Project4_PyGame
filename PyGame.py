@@ -1,5 +1,4 @@
 #Project 4 PyGame
-#commit
 
 import pygame
 import time
@@ -68,6 +67,7 @@ def game_loop(): #logic for game
                         if event.type == pygame.QUIT:
                                 pygame.quit()
                                 quit()
+                        
                                 
                         if event.type == pygame.KEYDOWN:
                                 if event.key == pygame.K_LEFT:
