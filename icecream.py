@@ -34,34 +34,40 @@ class Tub(Sprite):
         if keys [pygame.K_RIGHT]:
             self.rect.x += dist
 
-class Singlescoop_pink(Sprite):
-    def __init__(self):
+class Single_scoop(Sprite):
+    def __init__(self, y_pos):
         Sprite.__init__(self)
         self.image = image.load("singlescoop_pink.bmp").convert_alpha()
         self.image = transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0, width-100) #random x position, minus 100 so image does not go off screen
-        self.rect.y = -600 #start off screen so starting point to fall down is not visible
+        self.rect.y = -5000 + y_pos #start off screen so starting point to fall down is not visible
+##        print(self.rect.y)
     def update(self):
         self.rect.y += 3
         if self.rect.y > height:
             self.kill()
             
 
-class Triplescoop(Singlescoop_pink):
-    def __init__(self):
+class Triple_scoop(Single_scoop):
+    def __init__(self, y_pos):
         Sprite.__init__(self)
-##        pygame.time.delay(3000)
         self.image = image.load("triplescoop.bmp").convert_alpha()
         self.image = transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0, width-100)
-        self.rect.y = -600
+        self.rect.y = -5000 + y_pos
         
 
 tub = Tub()
-blocks = pygame.sprite.RenderPlain(Singlescoop_pink())
-extra_blocks = pygame.sprite.RenderPlain(Triplescoop())
+blocks = []
+extra_blocks = []
+for i in range(33):
+    y = i * 150
+    blocks.append(pygame.sprite.RenderPlain(Single_scoop(y)))
+for i in range(10):
+    y = i * 250
+    extra_blocks.append(pygame.sprite.RenderPlain(Triple_scoop(y)))
 sprites = pygame.sprite.RenderPlain(tub, *blocks, *extra_blocks)
 score = 0
 
@@ -76,8 +82,11 @@ def game_loop():
                 sys.exit()
                 
         global score
-        score += len(pygame.sprite.spritecollide(tub, blocks, True))
-        score += (3*(len(pygame.sprite.spritecollide(tub, extra_blocks, True))))
+        for i in blocks:
+            score += (1*(len(pygame.sprite.spritecollide(tub, i, True))))
+        for i in extra_blocks:
+            score += (3*(len(pygame.sprite.spritecollide(tub, i, True))))
+
             
         sprites.update()
         screen.fill(white)
@@ -90,6 +99,7 @@ def game_loop():
 
         
 game_loop()
+
 
 
 
