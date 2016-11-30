@@ -5,8 +5,6 @@ import sys
 
 init()
 
-##DELAY = 1000;
-
 width = 800
 height = 600
 
@@ -28,15 +26,13 @@ class Tub(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = width/2
         self.rect.y = height - 100       
-    def movement(self):
+    def update(self):
         keys = pygame.key.get_pressed()
         dist = 5
         if keys [pygame.K_LEFT]:
             self.rect.x -= dist
         if keys [pygame.K_RIGHT]:
             self.rect.x += dist
-    def hit(self, target):
-        return self.rect.colliderect(target)
 
 class Singlescoop_pink(Sprite):
     def __init__(self):
@@ -46,16 +42,16 @@ class Singlescoop_pink(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0, width-100) #random x position, minus 100 so image does not go off screen
         self.rect.y = -600 #start off screen so starting point to fall down is not visible
-    def movement(self):
-        self.rect.y += 5
+    def update(self):
+        self.rect.y += 3
         if self.rect.y > height:
             self.kill()
 
+
 tub = Tub()
-sspink = Singlescoop_pink()
-sprites = RenderPlain(tub, sspink)
+blocks = pygame.sprite.RenderPlain(Singlescoop_pink())
+sprites = pygame.sprite.RenderPlain(tub, *blocks)
 score = 0
-##time.set_timer(USEREVENT + 1, DELAY)
 
 def game_loop():
     
@@ -66,21 +62,26 @@ def game_loop():
                 quit()
                 sys.exit()
                 
-        if tub.hit(sspink):
-            sspink.kill()
-            global score
-            score += 1
-##            time.set_timer(USEREVENT + 1, DELAY)
+        global score
+        score += len(pygame.sprite.spritecollide(tub, blocks, True))
             
-        tub.movement()
-        sspink.movement()
+        sprites.update()
         screen.fill(white)
         t = f.render("Score = " + str(score), False, black)
         screen.blit(t, (0,0))
         sprites.update()
         sprites.draw(screen)
         display.update()
-        clock.tick(50)
+        clock.tick(60)
+
         
 game_loop()
 
+
+            #elif tub.rect.colliderect(Singlescoop_pink()):    
+##            elif event.type != pygame.QUIT:
+##                blocks_hit_list = pygame.sprite.spritecollide(tub, blocks, True)
+##                for block in blocks_hit_list:
+##                    global score
+##                    score += 1
+##                    score += len(pygame.sprite.spritecollide(tub, blocks, True))
