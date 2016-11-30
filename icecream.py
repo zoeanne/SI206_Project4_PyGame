@@ -41,14 +41,13 @@ class Single_scoop(Sprite):
         self.image = transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0, width-100) #random x position, minus 100 so image does not go off screen
-        self.rect.y = -5000 + y_pos #start off screen so starting point to fall down is not visible
+        self.rect.y = -9000 + y_pos #start off screen so starting point to fall down is not visible
 ##        print(self.rect.y)
     def update(self):
         self.rect.y += 3
         if self.rect.y > height:
             self.kill()
             
-
 class Triple_scoop(Single_scoop):
     def __init__(self, y_pos):
         Sprite.__init__(self)
@@ -56,21 +55,33 @@ class Triple_scoop(Single_scoop):
         self.image = transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0, width-100)
-        self.rect.y = -5000 + y_pos
-        
+        self.rect.y = -9000 + y_pos
 
+class Scooper(Single_scoop):
+    def __init__(self, y_pos):
+        Sprite.__init__(self)
+        self.image = image.load("scooper.bmp").convert_alpha()
+        self.image = transform.scale(self.image, (100, 100))
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randint(0, width-100)
+        self.rect.y = -9000 + y_pos
+        
 tub = Tub()
 blocks = []
 extra_blocks = []
-for i in range(33):
+enemy_blocks = []
+for i in range(60):
     y = i * 150
     blocks.append(pygame.sprite.RenderPlain(Single_scoop(y)))
-for i in range(10):
-    y = i * 250
+for i in range(20):
+    y = i * 350
     extra_blocks.append(pygame.sprite.RenderPlain(Triple_scoop(y)))
-sprites = pygame.sprite.RenderPlain(tub, *blocks, *extra_blocks)
+for i in range(30):
+    y = i * 250 
+    enemy_blocks.append(pygame.sprite.RenderPlain(Scooper(y)))
+sprites = pygame.sprite.RenderPlain(tub, *blocks, *extra_blocks, *enemy_blocks)
 score = 0
-
+#maxscore user can reach is 120 points 
 
 def game_loop():
     
@@ -86,6 +97,8 @@ def game_loop():
             score += (1*(len(pygame.sprite.spritecollide(tub, i, True))))
         for i in extra_blocks:
             score += (3*(len(pygame.sprite.spritecollide(tub, i, True))))
+        for i in enemy_blocks:
+            score -= (1*(len(pygame.sprite.spritecollide(tub, i, True))))
 
             
         sprites.update()
