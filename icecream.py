@@ -46,12 +46,25 @@ class Singlescoop_pink(Sprite):
         self.rect.y += 3
         if self.rect.y > height:
             self.kill()
+            
 
+class Triplescoop(Singlescoop_pink):
+    def __init__(self):
+        Sprite.__init__(self)
+##        pygame.time.delay(3000)
+        self.image = image.load("triplescoop.bmp").convert_alpha()
+        self.image = transform.scale(self.image, (100, 100))
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randint(0, width-100)
+        self.rect.y = -600
+        
 
 tub = Tub()
 blocks = pygame.sprite.RenderPlain(Singlescoop_pink())
-sprites = pygame.sprite.RenderPlain(tub, *blocks)
+extra_blocks = pygame.sprite.RenderPlain(Triplescoop())
+sprites = pygame.sprite.RenderPlain(tub, *blocks, *extra_blocks)
 score = 0
+
 
 def game_loop():
     
@@ -64,6 +77,7 @@ def game_loop():
                 
         global score
         score += len(pygame.sprite.spritecollide(tub, blocks, True))
+        score += (3*(len(pygame.sprite.spritecollide(tub, extra_blocks, True))))
             
         sprites.update()
         screen.fill(white)
@@ -76,6 +90,21 @@ def game_loop():
 
         
 game_loop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             #elif tub.rect.colliderect(Singlescoop_pink()):    
