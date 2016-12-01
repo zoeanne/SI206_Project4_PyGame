@@ -17,7 +17,7 @@ black = (0,0,0)
 white = (255,255,255)
 red = (255,0,0)
 
-f = pygame.font.Font(None, 40)
+f = pygame.font.Font("freesansbold.ttf", 30)
 
 class Tub(Sprite):   
     def __init__(self):
@@ -25,7 +25,7 @@ class Tub(Sprite):
         self.image = pygame.image.load("tub.bmp").convert_alpha()
         self.image = pygame.transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()
-        self.rect.x = width/2
+        self.rect.x = width/2 - 50
         self.rect.y = height - 100       
     def update(self):
         keys = pygame.key.get_pressed()
@@ -67,13 +67,24 @@ class Scooper(Single_scoop):
         self.rect.x = random.randint(0, width-100)
         self.rect.y = -9000 + y_pos
 
-
 def gameover():
-    f = pygame.font.Font(None, 30)
-    t = f.render("Game Over! Your ending score is " + str(score), False, red)
-    screen.blit(t, (200,300)) #x, y 
+    a = pygame.font.Font("freesansbold.ttf", 27)
+    b = pygame.font.Font(None, 25)  
+    if score < 50:
+        x = a.render("Novice Scooper! Your scooping score is " + str(score), False, red)
+        y = b.render("Keep practicing to become an EXPERT Super Scooper! (window will close automatically)", False, black)
+    elif score >=50 and score <80:
+        x = a.render("Super Scooper! Your scooping score is " + str(score), False, red)
+        y = b.render("Keep practicing to become an EXPERT Super Scooper! (window will close automatically)", False, black)
+    elif score >=80:
+        x = a.render("EXPERT Super Scooper! Your scooping score is " + str(score), False, red)
+        y = b.render("You've demonstrated your skills and are now reading to show the world", False, black)
+        z = b.render("your Super Scooping abilities! Thanks for playing! (window will close automatically)", False, black)
+        screen.blit(z, (50, 350))
+    screen.blit(x, (50,200)) #x, y
+    screen.blit(y, (50, 300))
     pygame.display.update()
-    time.sleep(5)
+    time.sleep(10)
     pygame.quit()
     sys.exit()
         
@@ -97,6 +108,8 @@ score = 0
 
 def game_loop():
 
+    pygame.mouse.set_visible(False)
+    
     pygame.mixer.music.load("Ice_Cream_Song_Loop.wav")
     pygame.mixer.music.play(-1, 0.0)
 
@@ -130,27 +143,3 @@ def game_loop():
         
 game_loop()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            #elif tub.rect.colliderect(Singlescoop_pink()):    
-##            elif event.type != pygame.QUIT:
-##                blocks_hit_list = pygame.sprite.spritecollide(tub, blocks, True)
-##                for block in blocks_hit_list:
-##                    global score
-##                    score += 1
-##                    score += len(pygame.sprite.spritecollide(tub, blocks, True))
