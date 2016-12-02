@@ -9,7 +9,7 @@ pygame.init()
 width = 800
 height = 600
 
-score = 0
+score = 0 
 
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Super Scooping Challenge")
@@ -43,10 +43,10 @@ class Truck(Sprite):
     def __init__(self):
         Sprite.__init__(self)
         self.image = pygame.image.load("truck.bmp").convert_alpha()
-        self.image = pygame.transform.scale(self.image, (100, 100))
+        self.image = pygame.transform.scale(self.image, (180, 150)) #w,h
         self.rect = self.image.get_rect()
         self.rect.x = 0
-        self.rect.y = height - 100      
+        self.rect.y = height - 150    
     def update(self):
         dist = 1
         self.rect.x += dist
@@ -89,13 +89,7 @@ class Scooper(Single_scoop):
         self.rect.x = random.randint(0, width-100)
         self.rect.y = -9000 + y_pos
 
-
-
-
-
 def game_intro():
-
-    pygame.mouse.set_visible(False)
     
     pygame.mixer.music.load("Ice_Cream_Song_Loop.wav")
     pygame.mixer.music.play(-1, 0.0)
@@ -114,6 +108,17 @@ def game_intro():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     game_loop()
+
+            if event.type == pygame.MOUSEBUTTONUP: #Creating easter egg :P 
+                pos = pygame.mouse.get_pos()
+                l = pygame.font.Font("freesansbold.ttf",30)
+                m = l.render("Created by Zoe Halbeisen", False, pink)
+                if truck.rect.collidepoint(pos):
+                    pygame.mouse.set_visible(False)
+                    screen.blit(m, (200,400))
+                    pygame.display.update()
+                    pygame.time.wait(3000)
+                    
                     
         screen.fill(blue)              
         x = pygame.font.Font("freesansbold.ttf", 40)
@@ -144,22 +149,24 @@ def game_intro():
 
 def gameover():
     screen.fill(blue)
+    image = pygame.image.load("triplescoop.bmp").convert_alpha()
     a = pygame.font.Font("freesansbold.ttf", 27)
     b = pygame.font.Font(None, 25)
     global score
     if score < 50:
-        x = a.render("Novice Scooper! Your scooping score is " + str(score), False, red)
+        x = a.render("Novice Scooper! Your scooping score is " + str(score), False, pink)
         y = b.render("Keep practicing to become an EXPERT Super Scooper! (press spacebar to play again)", False, black)
     if score >=50 and score <80:
-        x = a.render("Super Scooper! Your scooping score is " + str(score), False, red)
+        x = a.render("Super Scooper! Your scooping score is " + str(score), False, pink)
         y = b.render("Keep practicing to become an EXPERT Super Scooper! (press spacebar to play again)", False, black)
     if score >=80:
-        x = a.render("EXPERT Super Scooper! Your scooping score is " + str(score), False, red)
+        x = a.render("EXPERT Super Scooper! Your scooping score is " + str(score), False, pink)
         y = b.render("You've demonstrated your skills and are now reading to show the world", False, black)
         z = b.render("your Super Scooping abilities! Thanks for playing! (press spacebar to play again)", False, black)
-        screen.blit(z, (50, 330))
+        screen.blit(z, (50, 280))
     screen.blit(x, (50,200)) #x, y
-    screen.blit(y, (50, 300))
+    screen.blit(y, (50, 250))
+    screen.blit(image, (width/2, height/2))
     pygame.display.update()
 
     gameover = True
@@ -185,8 +192,6 @@ def gameover():
 
 def game_loop():
 
-##    bg = pygame.image.load("bg.bmp").convert()
-##    screen.blit(bg, (0,0))
 
     pygame.mouse.set_visible(False)
 
@@ -224,13 +229,13 @@ def game_loop():
             score -= (3*(len(pygame.sprite.spritecollide(tub, i, True))))
             
         sprites.update()
-        screen.fill(white)
+        screen.fill(blue)
         t = f.render("Score = " + str(score), False, black)
         screen.blit(t, (0,0))
         sprites.update()
         sprites.draw(screen)
         pygame.display.update()
-##        clock.tick(60)
+
 
         if len(sprites) == 1:
             gameover()
