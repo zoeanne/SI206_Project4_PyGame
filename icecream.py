@@ -143,6 +143,7 @@ def game_intro():
 
 
 def gameover():
+    screen.fill(blue)
     a = pygame.font.Font("freesansbold.ttf", 27)
     b = pygame.font.Font(None, 25)
     global score
@@ -156,7 +157,7 @@ def gameover():
         x = a.render("EXPERT Super Scooper! Your scooping score is " + str(score), False, red)
         y = b.render("You've demonstrated your skills and are now reading to show the world", False, black)
         z = b.render("your Super Scooping abilities! Thanks for playing! (press spacebar to play again)", False, black)
-        screen.blit(z, (50, 350))
+        screen.blit(z, (50, 330))
     screen.blit(x, (50,200)) #x, y
     screen.blit(y, (50, 300))
     pygame.display.update()
